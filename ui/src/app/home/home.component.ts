@@ -31,7 +31,7 @@ export class HomeComponent implements AfterViewInit {
 
   checkLogin(arg0: string, arg1: string) {
     if (this.user === 'admin' && this.pass === 'pass') {
-      this.router.navigateByUrl('main');
+      this.router.navigate(['/main']);
     }
     else {
       this.setText("error : Invalid Credentials\n>>>");

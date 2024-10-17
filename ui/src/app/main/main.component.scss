@@ -1,0 +1,14 @@
+:host {
+    color: black;
+    display: inherit;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    width: 80vw;
+    height: 50px;
+    justify-content: center;
+    background-color: aquamarine;
+}
