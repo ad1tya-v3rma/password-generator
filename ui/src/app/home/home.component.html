@@ -1,0 +1,20 @@
+<div class="top">
+    <glitch-text [customAtb]="text">
+    </glitch-text>
+</div>
+
+<div class="container">
+    <div class="pentagon-1">
+        <div class="inner">
+            <div class="title">
+                <typewriter [customText]="'login...'"></typewriter>
+            </div>
+            <div class="input">
+                <textarea #input name="" id="" (keypress)="appendText($event)"></textarea>
+                <!-- <input #name type="text" name="" id="" placeholder="[enter username]">
+                <input #pass type="password" name="" id="" placeholder="[enter password]">
+                <button type="submit" (click)="checkLogin(name.value, pass.value)">submit</button> -->
+            </div>
+        </div>
+    </div>
+</div>
