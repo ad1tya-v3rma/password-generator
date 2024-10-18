@@ -8,6 +8,8 @@ import { GlitchTextComponent } from './glitch-text/glitch-text.component';
 import { TypewriterComponent } from './typewriter/typewriter.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +21,9 @@ import { MainComponent } from './main/main.component'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatButtonModule
+    MatButtonModule,
+    BrowserAnimationsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

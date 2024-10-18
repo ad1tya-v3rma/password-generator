@@ -1,4 +1,8 @@
-<div class="container">
-    <div>{{generatedPass}}</div>
-</div>
-<button mat-button>generate pass</button>
+<mat-card>
+    <div class="container">
+        <typewriter *ngIf="generatedPass" [customText]="generatedPass"></typewriter>
+    </div>
+    <div class="btn-container" (mouseover)="toggle()" (mouseleave)="toggle()">
+        <button mat-raised-button [color]="isHovered ? 'primary' : ''" (click)="generatePass()">generate pass</button>
+    </div>
+</mat-card>
