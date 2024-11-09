@@ -3,20 +3,16 @@ package com.password_generator.api.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 
+
 import java.io.IOException;
-import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class SqlInjectionFilter implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
+    private static final Pattern SQL_INJECTION_PATTERN = Pattern.compile(".*(\\b(select|insert|update|delete|drop|union|;|--|#|\\s+or\\s+|\\s+and\\s+)\\b).*", Pattern.CASE_INSENSITIVE);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -24,33 +20,24 @@ public class SqlInjectionFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Get the request parameters
-        String queryString = httpRequest.getQueryString();
-        String requestBody = httpRequest.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
-
-        // Check for SQL injection patterns
-        if (isSqlInjectionAttempt(queryString) || isSqlInjectionAttempt(requestBody)) {
-            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input detected.");
-            return; // Stop further processing
+        // Validate request parameters
+        if (isSqlInjectionPresent(httpRequest)) {
+            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request parameters");
+            return;
         }
 
-        // Continue the filter chain
+        // Proceed with the next filter or the requested resource
         chain.doFilter(request, response);
     }
 
-    private boolean isSqlInjectionAttempt(String input) {
-        if (input == null) {
-            return false;
+    private boolean isSqlInjectionPresent(HttpServletRequest request) {
+        // Check request parameters
+        for (String param : request.getParameterMap().keySet()) {
+            String value = request.getParameter(param);
+            if (SQL_INJECTION_PATTERN.matcher(value).matches()) {
+                return true;
+            }
         }
-        String lowerInput = input.toLowerCase();
-        return lowerInput.contains("select") || lowerInput.contains("insert") ||
-                lowerInput.contains("update") || lowerInput.contains("delete") ||
-                lowerInput.contains("drop") || lowerInput.contains("--") ||
-                lowerInput.contains(";") || lowerInput.contains("'");
-    }
-
-    @Override
-    public void destroy() {
-        // Cleanup code, if needed
+        return false;
     }
 }
