@@ -22,7 +22,6 @@ public class PasswordServiceImpl implements PasswordService, Serializable {
     private final CharacterSet characterSet;
     private final Random randomGenerator = new Random();
     private Set<StringBuilder> passwordSet = new HashSet<>();
-
     @Override
     public Optional<String> getPassword() {
 
@@ -33,7 +32,7 @@ public class PasswordServiceImpl implements PasswordService, Serializable {
              num = getRandomNumber(0, characterSet.getUpper().length - 1);
             letter = characterSet.getUpper()[num];
             //this.password = this.password + (password.toString().contains(letter) ? continue : letter);
-            if (!password.toString().contains(letter)) {
+            if (password.toString().contains(letter)) {
                 continue;
             }
             else {

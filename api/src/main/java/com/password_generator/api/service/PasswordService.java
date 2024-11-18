@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Service
 @Qualifier
-@Lazy
 public interface PasswordService  {
     Optional<String> getPassword();
 }
