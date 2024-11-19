@@ -78,7 +78,7 @@ public class PasswordServiceImpl implements PasswordService, Serializable {
 
     }
 
-    private int getRandomNumber(int min, int max)
+    public int getRandomNumber(int min, int max)
     {
         //return (int) Math.floor(min + (Math.random() * (max - min + 1)));
         return randomGenerator.nextInt(min,max);

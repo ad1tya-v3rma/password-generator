@@ -1,5 +1,6 @@
 package com.password_generator.api.config;
 
+import com.password_generator.api.filters.JwtAuthenticationFilter;
 import com.password_generator.api.filters.SqlInjectionFilter;
 import com.password_generator.api.pojo.UserPojo;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Collection;
 
@@ -31,6 +34,7 @@ import java.util.Collection;
 public class SecurityConfig {
     //@Qualifier("userPojo")
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 /*
 
     public UserDetailsService getUserDetailsService() {
@@ -54,7 +58,9 @@ public class SecurityConfig {
         //request.addFilter(new SqlInjectionFilter());
         return request
                 .authorizeHttpRequests(rqst -> rqst.anyRequest()
-                        .authenticated()).formLogin(Customizer.withDefaults())
+                        .authenticated())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults()).build();
     }
 
