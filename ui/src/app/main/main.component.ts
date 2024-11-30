@@ -20,4 +20,7 @@ export class MainComponent {
     this.generatedPass = this.passwordService.getSecurePassword();
   }
 
+  clear() {
+    this.generatedPass = "";
+  }
 }

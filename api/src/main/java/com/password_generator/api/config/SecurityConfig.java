@@ -1,11 +1,7 @@
 package com.password_generator.api.config;
 
 import com.password_generator.api.filters.JwtAuthenticationFilter;
-import com.password_generator.api.filters.SqlInjectionFilter;
-import com.password_generator.api.pojo.UserPojo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -14,18 +10,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.Collection;
+import java.util.Arrays;
 
 @EnableWebSecurity
 @Configuration
@@ -56,12 +47,19 @@ public class SecurityConfig {
         request.httpBasic(Customizer.withDefaults());*/
         //request.csrf(customizer -> customizer.disable());
         //request.addFilter(new SqlInjectionFilter());
-        return request
-                .authorizeHttpRequests(rqst -> rqst.anyRequest()
+        return request.cors(cors -> cors.configurationSource(req -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Arrays.asList("*"));
+                    configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","OPTIONS"));
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+                    return configuration;
+                }))
+                .authorizeHttpRequests(rqst -> rqst.requestMatchers("generator/login","generator/csrf")
+                        .permitAll().anyRequest()
                         .authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults()).build();
+                .httpBasic(Customizer.withDefaults()).csrf(customizer -> customizer.disable()).build();
     }
 
     @Bean

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @Getter
 @Lazy(value = false)
-public class User{
+public class UserUtils {
     @Value("${uname}")
     private String username;
     @Value("${password}")

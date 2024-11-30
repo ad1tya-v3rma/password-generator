@@ -1,8 +1,9 @@
 <mat-card>
-    <div class="container">
+    <div class="container text">
         <typewriter *ngIf="generatedPass" [customText]="generatedPass"></typewriter>
     </div>
     <div class="btn-container" (mouseover)="toggle()" (mouseleave)="toggle()">
         <button mat-raised-button [color]="isHovered ? 'primary' : ''" (click)="generatePass()">generate pass</button>
+      <button mat-raised-button (click)="clear()">clear</button>
     </div>
 </mat-card>

@@ -1,5 +1,6 @@
 package com.password_generator.api.pojo;
 
+import com.password_generator.api.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,9 +11,9 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private UserPojo user;
+    private UserDetailsServiceImpl user;
 
-    public UserPrincipal(UserPojo user) {
+    public UserPrincipal(UserDetailsServiceImpl user) {
         this.user = user;
     }
 

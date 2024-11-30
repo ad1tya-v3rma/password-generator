@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { LoginService } from './../services/login.service';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { every, isEmpty } from 'rxjs';
 
@@ -16,7 +17,7 @@ export class HomeComponent implements AfterViewInit {
   user: string = '';
   pass: string = '';
   cache: string = '';
-  constructor(private router: Router) { }
+  constructor(private router: Router, private loginService: LoginService) { }
 
   ngAfterViewInit(): void {
     this.setText(">>>");
@@ -29,8 +30,12 @@ export class HomeComponent implements AfterViewInit {
     }
   }
 
-  checkLogin(arg0: string, arg1: string) {
-    if (this.user === 'admin' && this.pass === 'pass') {
+  async checkLogin(arg0: string, arg1: string) {
+
+    const result = await this.loginService.validateCredentials(arg0, arg1)
+    var loginFlag = false;
+    temp: Boolean;
+    if (result) {
       this.router.navigate(['/main']);
     }
     else {
